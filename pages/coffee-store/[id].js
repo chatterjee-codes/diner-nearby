@@ -12,12 +12,13 @@ import styles from '../../styles/coffee-store.module.css';
 export async function getStaticProps(staticProps) {
     const params = staticProps.params;
     const coffeeStores = await fetchCoffeeStores();
+    const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+        return coffeeStore.id.toString() === params.id;
+    });
     // console.log('params', params);
     return {
         props: {
-            coffeeStore: coffeeStores.find((coffeeStore) => {
-                return coffeeStore.id.toString() === params.id;
-            })
+            coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {}
         }
     };
 }
@@ -42,7 +43,7 @@ const CoffeeStore = (props) => {
     // console.log('router', router);
 
     if (router.isFallback) {
-        return <div>Loading</div>;
+        return <div>Loading...</div>;
     }
 
     const { name, address, neighborhood, imgUrl } = props.coffeeStore;
@@ -51,7 +52,6 @@ const CoffeeStore = (props) => {
         console.log('handleupvotebutton');
     };
 
-    // console.log('props', props);
     return (
         <div className={styles.layout}>
             <Head>
