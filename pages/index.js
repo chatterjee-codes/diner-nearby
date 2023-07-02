@@ -9,7 +9,7 @@ import { fetchCoffeeStores } from '../lib/coffee-stores';
 
 import useTrackLocation from '../hooks/use-track-location';
 
-import { ACTION_TYPES, StoreContext } from './_app';
+import { ACTION_TYPES, StoreContext } from '../store/store-context';
 
 // import coffeeStoresData from '../data/coffee-stores.json';
 
@@ -43,14 +43,18 @@ export default function Home(props) {
         const fetchData = async () => {
             if (latLong) {
                 try {
-                    const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
-                    console.log({ fetchedCoffeeStores });
+                    const fetchedCoffeeStores = await fetch(
+                        `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=30`
+                    );
+                    const coffeeStores = await fetchedCoffeeStores.json();
+                    // console.log({ fetchedCoffeeStores });
                     // set coffee store
                     // setCoffeeStores(fetchedCoffeeStores);
                     dispatch({
                         type: ACTION_TYPES.SET_COFFEE_STORES,
-                        payload: { coffeeStores: fetchedCoffeeStores }
+                        payload: { coffeeStores }
                     });
+                    setCoffeeStoresError('');
                     console.log(coffeeStores);
                 } catch (error) {
                     console.log({ error });
@@ -80,7 +84,7 @@ export default function Home(props) {
                     handleOnClick={handleOnBannerBtnClick}
                 />
                 {locationErrorMsg && <p>Something went wrong: {locationErrorMsg}</p>}
-                {coffeeStoresError && <p>Something went wrong: {locationErrorMsg}</p>}
+                {coffeeStoresError && <p>Something went wrong: {coffeeStoresError}</p>}
                 <div className={styles.heroImage}>
                     <Image
                         src='/static/hero-image.png'

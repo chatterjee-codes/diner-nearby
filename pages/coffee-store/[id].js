@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -6,6 +8,10 @@ import Image from 'next/image';
 import cls from 'classnames';
 
 import { fetchCoffeeStores } from '../../lib/coffee-stores';
+
+import { StoreContext } from '../../store/store-context';
+
+import { isEmpty } from '../../utils/isEmpty.util';
 
 import styles from '../../styles/coffee-store.module.css';
 
@@ -38,15 +44,33 @@ export async function getStaticPaths() {
     };
 }
 
-const CoffeeStore = (props) => {
+const CoffeeStore = (initialProps) => {
     const router = useRouter();
-    // console.log('router', router);
-
     if (router.isFallback) {
         return <div>Loading...</div>;
     }
 
-    const { name, address, neighborhood, imgUrl } = props.coffeeStore;
+    // console.log('router', router);
+    const id = router.query.id;
+
+    const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
+
+    const {
+        state: { coffeeStores }
+    } = useContext(StoreContext);
+
+    useEffect(() => {
+        if (initialProps.coffeeStore && isEmpty(initialProps.coffeeStore)) {
+            if (coffeeStores.length > 0) {
+                const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+                    return coffeeStore.id.toString() === id;
+                });
+                setCoffeeStore(findCoffeeStoreById);
+            }
+        }
+    }, [id]);
+
+    const { name, address, neighborhood, imgUrl } = coffeeStore;
 
     const handleUpvoteButton = () => {
         console.log('handleupvotebutton');
