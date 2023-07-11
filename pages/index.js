@@ -67,14 +67,14 @@ export default function Home(props) {
     return (
         <div className={styles.container}>
             <Head>
-                <title>Coffee Connoiseur</title>
+                <title>Diner Connoiseur</title>
                 <link rel='icon' href='/favicon.ico' />
                 <meta name='description' content='allows you to discover diners nearby'></meta>
             </Head>
 
             <main className={styles.main}>
                 <Banner
-                    buttonText={isFindingLocation ? 'Locating...' : 'View stores nearby'}
+                    buttonText={isFindingLocation ? 'Locating...' : 'View diners nearby'}
                     handleOnClick={handleOnBannerBtnClick}
                 />
                 {locationErrorMsg && <p>Something went wrong: {locationErrorMsg}</p>}
@@ -90,7 +90,7 @@ export default function Home(props) {
 
                 {coffeeStores.length > 0 && (
                     <div className={styles.sectionWrapper}>
-                        <h2 className={styles.heading2}>Stores near me</h2>
+                        <h2 className={styles.heading2}>Near me</h2>
                         <div className={styles.cardLayout}>
                             {coffeeStores.map((coffeeStore) => {
                                 return (
@@ -111,7 +111,7 @@ export default function Home(props) {
                 )}
                 {props.coffeeStores.length > 0 && (
                     <div className={styles.sectionWrapper}>
-                        <h2 className={styles.heading2}>Toronto Stores</h2>
+                        <h2 className={styles.heading2}>Guwahati Diners</h2>
                         <div className={styles.cardLayout}>
                             {props.coffeeStores.map((coffeeStore) => {
                                 return (
