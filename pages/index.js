@@ -55,9 +55,7 @@ export default function Home(props) {
                         payload: { coffeeStores }
                     });
                     setCoffeeStoresError('');
-                    console.log(coffeeStores);
                 } catch (error) {
-                    console.log({ error });
                     // set error
                     setCoffeeStoresError(error.message);
                 }
@@ -68,7 +66,6 @@ export default function Home(props) {
     }, [latLong]);
 
     const handleOnBannerBtnClick = () => {
-        // console.log('hi! banner button');
         handleTrackLocation();
     };
     return (

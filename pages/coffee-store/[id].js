@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
 
+import useSWR from 'swr';
+
 import cls from 'classnames';
 
 import { fetchCoffeeStores } from '../../lib/coffee-stores';
@@ -12,6 +14,7 @@ import { fetchCoffeeStores } from '../../lib/coffee-stores';
 import { StoreContext } from '../../store/store-context';
 
 import { isEmpty } from '../../utils/isEmpty.util';
+import fetcher from '../../utils/fetcher.util';
 
 import styles from '../../styles/coffee-store.module.css';
 
@@ -21,7 +24,6 @@ export async function getStaticProps(staticProps) {
     const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
         return coffeeStore.id.toString() === params.id;
     });
-    // console.log('params', params);
     return {
         props: {
             coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {}
@@ -59,22 +61,81 @@ const CoffeeStore = (initialProps) => {
         state: { coffeeStores }
     } = useContext(StoreContext);
 
-    useEffect(() => {
-        if (initialProps.coffeeStore && isEmpty(initialProps.coffeeStore)) {
-            if (coffeeStores.length > 0) {
-                const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
-                    return coffeeStore.id.toString() === id;
-                });
-                setCoffeeStore(findCoffeeStoreById);
-            }
+    const handleCreateCoffeeStore = async (coffeeStore) => {
+        try {
+            const { id, name, address, neighborhood, vote, imgUrl } = coffeeStore;
+            const response = await fetch('/api/createCoffeeStore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id,
+                    name,
+                    address: address || '',
+                    neighborhood: neighborhood || '',
+                    vote: 0,
+                    imgUrl
+                })
+            });
+            const dbCoffeeStore = await response.json();
+        } catch (error) {
+            console.error('Error creating coffee store', error);
         }
-    }, [id]);
+    };
+
+    useEffect(() => {
+        if (isEmpty(initialProps.coffeeStore)) {
+            if (coffeeStores.length > 0) {
+                const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
+                    return coffeeStore.id.toString() === id; // dynamic id
+                });
+                if (coffeeStoreFromContext) {
+                    setCoffeeStore(coffeeStoreFromContext);
+                    handleCreateCoffeeStore(coffeeStoreFromContext);
+                }
+            }
+        } else {
+            // SSG
+            handleCreateCoffeeStore(initialProps.coffeeStore);
+        }
+    }, [id, initialProps.coffeeStore]);
 
     const { name, address, neighborhood, imgUrl } = coffeeStore;
 
-    const handleUpvoteButton = () => {
-        console.log('handleupvotebutton');
+    const [voteCount, setVoteCount] = useState(0);
+
+    const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            setCoffeeStore(data[0]);
+            setVoteCount(data[0].vote);
+        }
+    }, [data]);
+
+    const handleUpvoteButton = async () => {
+        try {
+            const response = await fetch('/api/favoriteCoffeeStoreById', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id })
+            });
+            const dbCoffeeStore = await response.json();
+
+            if (dbCoffeeStore && dbCoffeeStore.length > 0) {
+                setVoteCount((count) => count + 1);
+            }
+        } catch (error) {
+            console.error('Error upvoting the coffee store', error);
+        }
     };
+
+    if (error) {
+        return <div>Something went wrong</div>;
+    }
 
     return (
         <div className={styles.layout}>
@@ -127,7 +188,7 @@ const CoffeeStore = (initialProps) => {
 
                     <div className={styles.iconWrapper}>
                         <Image src='/static/icons/star.svg' width='24' height='24' alt='star' />
-                        <p className={styles.text}>1</p>
+                        <p className={styles.text}>{voteCount}</p>
                     </div>
 
                     <button className={styles.upvoteButton} onClick={handleUpvoteButton}>
