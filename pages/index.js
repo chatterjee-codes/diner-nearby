@@ -11,11 +11,7 @@ import useTrackLocation from '../hooks/use-track-location';
 
 import { ACTION_TYPES, StoreContext } from '../store/store-context';
 
-// import coffeeStoresData from '../data/coffee-stores.json';
-
 export async function getStaticProps(context) {
-    // console.log('hi getStaticProps');
-
     const coffeeStores = await fetchCoffeeStores();
 
     return {
