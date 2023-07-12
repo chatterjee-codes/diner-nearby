@@ -110,6 +110,10 @@
     .cardLayout {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+    .heading2 {
+        font-size: 36px;
+        padding-bottom: 2rem;
+    }
 }
 
 @media (min-width: 1024px) {
