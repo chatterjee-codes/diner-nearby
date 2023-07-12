@@ -79,14 +79,14 @@ export default function Home(props) {
                 />
                 {locationErrorMsg && <p>Something went wrong: {locationErrorMsg}</p>}
                 {coffeeStoresError && <p>Something went wrong: {coffeeStoresError}</p>}
-                <div className={styles.heroImage}>
+                {/* <div className={styles.heroImage}>
                     <Image
                         src='/static/hero-image.png'
                         alt='hero-banner'
                         width={700}
                         height={400}
                     />
-                </div>
+                </div> */}
 
                 {coffeeStores.length > 0 && (
                     <div className={styles.sectionWrapper}>

@@ -140,17 +140,14 @@ const CoffeeStore = (initialProps) => {
     return (
         <div className={styles.layout}>
             <Head>
-                <title>{name}</title>
+                <title>{`${name} | Diner Connoiseur`}</title>
                 <meta name='description' content={`${name} diner`}></meta>
             </Head>
+            <div className={styles.backToHomeLink}>
+                <Link href='/'>← Back to Home</Link>
+            </div>
             <div className={styles.container}>
                 <div className={styles.col1}>
-                    <div className={styles.backToHomeLink}>
-                        <Link href='/'>← Back to Home</Link>
-                    </div>
-                    <div className={styles.nameWrapper}>
-                        <p className={styles.name}>{name}</p>
-                    </div>
                     <Image
                         src={
                             imgUrl ||
@@ -164,6 +161,9 @@ const CoffeeStore = (initialProps) => {
                 </div>
 
                 <div className={cls('glass', styles.col2)}>
+                    <div className={styles.nameWrapper}>
+                        <p className={styles.name}>{name}</p>
+                    </div>
                     {address && (
                         <div className={styles.iconWrapper}>
                             <Image
