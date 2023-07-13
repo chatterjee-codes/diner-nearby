@@ -87,17 +87,17 @@
 }
 
 .heading2 {
-    font-size: 28px;
+    font-size: 24px;
     text-align: center;
     font-weight: 500;
     line-height: 2.5rem;
     padding-bottom: 1rem;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     color: var(--text-white-100);
 }
 
 .sectionWrapper {
-    margin-top: 5rem;
+    margin-top: 3rem;
 }
 
 @media (min-width: 640px) {
@@ -117,6 +117,18 @@
 }
 
 @media (min-width: 1024px) {
+    .heading2 {
+        font-size: 28px;
+        text-align: center;
+        font-weight: 500;
+        line-height: 2.5rem;
+        padding-bottom: 1rem;
+        margin-top: 1.5rem;
+        color: var(--text-white-100);
+    }
+    .sectionWrapper {
+        margin-top: 5rem;
+    }
     .cardLayout {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }

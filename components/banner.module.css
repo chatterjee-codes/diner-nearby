@@ -10,7 +10,7 @@
     font-weight: 800;
     color: var(--text-black);
 
-    font-size: 3rem /* 48px */;
+    font-size: 2rem /* 48px */;
     line-height: 1;
     display: flex;
     justify-content: center;
@@ -27,7 +27,7 @@
 
 .subTitle {
     margin-top: 0.75rem;
-    font-size: 1.5rem /* 24px */;
+    font-size: 1rem /* 24px */;
     line-height: 2rem /* 32px */;
 
     color: var(--text-white-100);
@@ -45,9 +45,9 @@
     outline: 0;
     border: 0px;
 
-    padding-top: 1rem /* 16px */;
-    padding-bottom: 1rem /* 16px */;
-    font-size: 1.125rem /* 18px */;
+    padding-top: 0.75rem /* 16px */;
+    padding-bottom: 0.75rem /* 16px */;
+    font-size: 1rem /* 18px */;
     line-height: 1.75rem /* 28px */;
     padding-left: 2.5rem /* 40px */;
     padding-right: 2.5rem /* 40px */;
@@ -60,10 +60,7 @@
 
 .button:hover {
     transform: scale(1.05);
-}
-
-.button:hover {
-    background-color: var(--text-purple-dark);
+    background-color: var(--text-purple);
 }
 
 /** 
@@ -129,6 +126,7 @@
     }
 
     .subTitle {
+        font-size: 24px;
         margin-left: 0px;
         margin-right: 0px;
     }
